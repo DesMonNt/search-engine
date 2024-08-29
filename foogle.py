@@ -34,8 +34,11 @@ class Foogle:
         end = min(positions[0] + len(query) + length // 2, len(content))
         snippet = content[start:end]
 
+        if start > 0:
+            snippet = f'...{snippet}'
+
         if end < len(content):
-            snippet += "..."
+            snippet = f'{snippet}...'
 
         return snippet
 
