@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Foogle</title>
+</head>
+<body>
+    <h1>Search Results</h1>
+    <form method="POST" action="/">
+        <input type="text" name="query" value="{{ query }}" placeholder="Enter your search query">
+        <label>
+            <input type="checkbox" name="rank" {% if rank %}checked{% endif %}>
+            Enable Ranking
+        </label>
+        <label>
+            <input type="radio" name="logic" value="and" {% if logic == 'and' %}checked{% endif %}>
+            AND
+        </label>
+        <label>
+            <input type="radio" name="logic" value="or" {% if logic == 'or' %}checked{% endif %}>
+            OR
+        </label>
+        <button type="submit">Search</button>
+    </form>
+
+    {% if results %}
+        <h2>Results:</h2>
+        <ul>
+            {% for result in results %}
+                <li>
+                    <strong>Title:</strong> {{ result.title }}<br>
+                    <strong>Content:</strong> {{ result.snippet }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No results found.</p>
+    {% endif %}
+</body>
+</html>
