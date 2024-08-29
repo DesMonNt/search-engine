@@ -1,8 +1,5 @@
-import os.path
-
 from relevance_ranker import RelevanceRanker
 from indexer import Indexer
-from os import path
 
 
 class SearchEngine:
