@@ -112,7 +112,7 @@
     </style>
 </head>
 <body>
-    <h1>Search Results</h1>
+    <h1>Foogle</h1>
     <form method="POST" action="/">
         <div class="search-container">
             <input type="text" name="query" value="{{ query }}" placeholder="Enter your search query">
@@ -143,7 +143,7 @@
         <ul>
             {% for result in results %}
                 <li>
-                    <strong>Title:</strong> {{ result.title }}<br>
+                    <strong>Path:</strong> {{ result.title }}<br>
                     <strong>Content:</strong> {{ result.snippet }}
                 </li>
             {% endfor %}
