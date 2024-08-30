@@ -12,15 +12,18 @@ class SearchEngine:
 
     def search(self, query, rank=False):
         words = query.split()
-        result_docs = set()
 
-        for word in words:
+        if not words:
+            return []
+
+        result_docs = set(self.indexer.get_ids(words[0]))
+
+        for word in words[1:]:
             doc_ids = set(self.indexer.get_ids(word))
+            result_docs &= doc_ids
 
-            if result_docs:
-                result_docs &= doc_ids
-            else:
-                result_docs = doc_ids
+            if not result_docs:
+                return []
 
         result_docs = list(result_docs)
 
@@ -31,9 +34,13 @@ class SearchEngine:
 
     def search_or(self, query, rank=False):
         words = query.split()
-        result_docs = set()
 
-        for word in words:
+        if not words:
+            return []
+
+        result_docs = set(self.indexer.get_ids(words[0]))
+
+        for word in words[1:]:
             doc_ids = set(self.indexer.get_ids(word))
             result_docs |= doc_ids
 

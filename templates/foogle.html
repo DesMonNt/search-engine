@@ -51,6 +51,7 @@
             border-radius: 5px;
             font-size: 1em;
             cursor: pointer;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         button:hover {
@@ -65,19 +66,22 @@
         }
 
         .logic-container,
-        .rank-container {
+         .rank-container {
             display: flex;
             align-items: center;
             gap: 10px;
-        }
-
-        .rank-container {
-            margin-top: 10px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         label {
             font-size: 1em;
+            align-items: center;
             color: #666;
+        }
+
+        .description {
+            font-size: 0.9em;
+            color: #999;
         }
 
         h2 {
@@ -95,24 +99,58 @@
         li {
             background-color: #ffffff;
             padding: 15px;
-            margin-bottom: 10px;
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
         }
 
         li strong {
+            display: block;
             color: #333366;
             font-size: 1.2em;
+            margin-bottom: 5px;
+        }
+
+        .title-with-margin {
+            margin-bottom: 10px;
+            display: inline-block;
+            font-family: Arial, monospace;
+        }
+
+        .highlight {
+            font-weight: bold;
+            color: #333366;
+            font-size: 1.1em;
+            background-color: #e6f7ff;
+            padding: 0 3px;
+            border-radius: 3px;
         }
 
         p {
             text-align: center;
             color: #999;
         }
+
+        @media (max-width: 600px) {
+            .search-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            button {
+                width: 100%;
+            }
+
+            .logic-container,
+            .rank-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
     </style>
 </head>
 <body>
-    <h1>Foogle</h1>
+    <h1>FOOGLE</h1>
     <form method="POST" action="/">
         <div class="search-container">
             <input type="text" name="query" value="{{ query }}" placeholder="Enter your search query">
@@ -120,6 +158,7 @@
         </div>
         <div class="settings-container">
             <div class="logic-container">
+                <p class="description">Search mode:</p>
                 <label>
                     <input type="radio" name="logic" value="and" {% if logic == 'and' %}checked{% endif %}>
                     AND
@@ -130,26 +169,29 @@
                 </label>
             </div>
             <div class="rank-container">
+                <p class="description">Sorting:</p>
                 <label>
                     <input type="checkbox" name="rank" {% if rank %}checked{% endif %}>
-                    Enable Ranking
+                    Ranking
                 </label>
             </div>
         </div>
     </form>
 
     {% if results %}
-        <h2>Results:</h2>
-        <ul>
-            {% for result in results %}
-                <li>
-                    <strong>Path:</strong> {{ result.title }}<br>
-                    <strong>Content:</strong> {{ result.snippet }}
-                </li>
-            {% endfor %}
-        </ul>
+    <h2>RESULTS</h2>
+    <ul>
+        {% for result in results %}
+            <li>
+                <strong>PATH:</strong>
+                <span class="title-with-margin">{{ result.title|safe }}</span><br>
+                <strong>CONTENT:</strong>
+                <pre style="white-space: pre-wrap;">{{ result.snippet|safe }}</pre>
+            </li>
+        {% endfor %}
+    </ul>
     {% else %}
-        <p>No results found.</p>
+    <p>No results found</p>
     {% endif %}
 </body>
 </html>

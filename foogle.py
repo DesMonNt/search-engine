@@ -26,19 +26,16 @@ class Foogle:
         for word in words:
             positions.extend(self.search_engine.indexer.get_positions(doc_id, word))
 
-        if not positions:
-            return 'Result not found'
-
         content = self.documents[doc_id].content
         start = max(positions[0] - length // 2, 0)
         end = min(positions[0] + len(query) + length // 2, len(content))
         snippet = content[start:end]
 
         if start > 0:
-            snippet = f'...{snippet}'
+            snippet = f'...\n{snippet}'
 
         if end < len(content):
-            snippet = f'{snippet}...'
+            snippet = f'{snippet}\n...'
 
         return snippet
 
@@ -49,7 +46,7 @@ class Foogle:
         result = []
 
         for doc_id in docs_ids:
-            if not doc_id in self.documents:
+            if doc_id not in self.documents:
                 continue
 
             if not os.path.exists(os.path.abspath(self.documents[doc_id].title)):
@@ -83,12 +80,12 @@ class Foogle:
                         document_id += 1
 
                 except UnicodeDecodeError as e:
-                    logging.warning(f"Decode error: {file_name}, error: {e}")
+                    logging.warning(f"{file_name}, error: {e}")
 
                 except PermissionError as e:
-                    logging.warning(f"Permission denied: {file_name}, error: {e}")
+                    logging.warning(f"{file_name}, error: {e}")
 
     @staticmethod
     def _read_extensions(file_path):
         with open(file_path, 'r') as file:
-            return [line.strip() for line in file.readlines()]
+            return set(line.strip() for line in file.readlines())
