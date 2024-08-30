@@ -10,7 +10,7 @@ foogle = Foogle()
 
 def highlight_keywords(text, keywords):
     for word in keywords:
-        pattern = re.compile(re.escape(word), re.IGNORECASE)
+        pattern = re.compile(r'\b{}\b'.format(re.escape(word)), re.IGNORECASE)
         text = pattern.sub(f'<span class="highlight">{word}</span>', text)
 
     return text
