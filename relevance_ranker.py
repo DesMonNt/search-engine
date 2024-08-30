@@ -5,18 +5,25 @@ from collections import defaultdict
 class RelevanceRanker:
     def __init__(self, indexer):
         self.indexer = indexer
+        self.idf_cache = {}
 
     def calculate_tf(self, word, document_id):
         word_positions = self.indexer.get_positions(document_id, word)
+        num_terms = len(self.indexer.get_words_in_document(document_id))
 
-        return len(word_positions) / sum(len(self.indexer.get_positions(document_id, w))
-                                         for w in set(self.indexer._words_in_documents[document_id]))
+        return len(word_positions) / num_terms
 
     def calculate_idf(self, word):
-        total_docs = len(self.indexer._words_in_documents)
+        if word in self.idf_cache:
+            return self.idf_cache[word]
+
+        total_docs = self.indexer.get_total_documents()
         docs_with_word = len(self.indexer.get_ids(word))
 
-        return log(total_docs / (1 + docs_with_word))
+        idf_value = log(total_docs / (1 + docs_with_word))
+        self.idf_cache[word] = idf_value
+
+        return idf_value
 
     def rank_documents(self, query, document_ids):
         query_words = query.split()
