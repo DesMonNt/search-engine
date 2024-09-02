@@ -1,7 +1,8 @@
 from threading import Thread
 from webbrowser import open
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, redirect, url_for
 import re
+from os import path, startfile
 from foogle import Foogle
 
 app = Flask(__name__)
@@ -14,6 +15,16 @@ def highlight_keywords(text, keywords):
         text = pattern.sub(f'<span class="highlight">{word}</span>', text)
 
     return text
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return redirect('/')
+
+
+@app.errorhandler(500)
+def internal(e):
+    return redirect('/')
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -42,8 +53,13 @@ def search():
     return render_template('foogle.html', query=query, results=results, rank=rank, logic=logic)
 
 
-if __name__ == "__main__":
-    browser_thread = Thread(target=open("http://127.0.0.1:5000/"))
-    browser_thread.start()
+@app.route('/file/<path:filepath>', methods=['GET'])
+def open_file(filepath: str):
+    if path.isfile(filepath):
+        startfile(filepath)
+        return "file is opening"
+    return redirect('/')
 
+
+if __name__ == "__main__":
     app.run(debug=False, use_reloader=False)
