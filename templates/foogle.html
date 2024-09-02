@@ -66,7 +66,7 @@
         }
 
         .logic-container,
-         .rank-container {
+        .rank-container {
             display: flex;
             align-items: center;
             gap: 10px;
@@ -148,50 +148,63 @@
             }
         }
     </style>
+    <script type="text/javascript">
+        function openWindowWithClose(url) {
+            var newWindow = window.open(url, '_blank');
+            if (newWindow) {
+                setTimeout(function () {
+                    newWindow.close();
+                }, 1500);
+            }
+        }
+    </script>
 </head>
 <body>
-    <h1>FOOGLE</h1>
-    <form method="POST" action="/">
-        <div class="search-container">
-            <input type="text" name="query" value="{{ query }}" placeholder="Enter your search query">
-            <button type="submit">Search</button>
+<h1>FOOGLE</h1>
+<form method="POST" action="/">
+    <div class="search-container">
+        <input type="text" name="query" value="{{ query }}" placeholder="Enter your search query">
+        <button type="submit">Search</button>
+    </div>
+    <div class="settings-container">
+        <div class="logic-container">
+            <p class="description">Search mode:</p>
+            <label>
+                <input type="radio" name="logic" value="and" {% if logic== 'and' %}checked{% endif %}>
+                AND
+            </label>
+            <label>
+                <input type="radio" name="logic" value="or" {% if logic== 'or' %}checked{% endif %}>
+                OR
+            </label>
         </div>
-        <div class="settings-container">
-            <div class="logic-container">
-                <p class="description">Search mode:</p>
-                <label>
-                    <input type="radio" name="logic" value="and" {% if logic == 'and' %}checked{% endif %}>
-                    AND
-                </label>
-                <label>
-                    <input type="radio" name="logic" value="or" {% if logic == 'or' %}checked{% endif %}>
-                    OR
-                </label>
-            </div>
-            <div class="rank-container">
-                <p class="description">Sorting:</p>
-                <label>
-                    <input type="checkbox" name="rank" {% if rank %}checked{% endif %}>
-                    Ranking
-                </label>
-            </div>
+        <div class="rank-container">
+            <p class="description">Sorting:</p>
+            <label>
+                <input type="checkbox" name="rank" {% if rank %}checked{% endif %}>
+                Ranking
+            </label>
         </div>
-    </form>
+    </div>
+</form>
 
-    {% if results %}
-    <h2>RESULTS</h2>
-    <ul>
-        {% for result in results %}
-            <li>
-                <strong>PATH:</strong>
-                <span class="title-with-margin">{{ result.title|safe }}</span><br>
-                <strong>CONTENT:</strong>
-                <pre style="white-space: pre-wrap;">{{ result.snippet|safe }}</pre>
-            </li>
-        {% endfor %}
-    </ul>
-    {% else %}
-    <p>No results found</p>
-    {% endif %}
+{% if results %}
+<h2>RESULTS</h2>
+<ul>
+    {% for result in results %}
+    <li>
+        <strong>PATH:</strong>
+        <span class="title-with-margin">
+            <a href="#" onclick="openWindowWithClose('{{ url_for('open_file', filepath=result.title|safe) }}');
+            return false;">{{ result.title|safe }}</a>
+        </span><br>
+        <strong>CONTENT:</strong>
+        <pre style="white-space: pre-wrap;">{{ result.snippet|safe }}</pre>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>No results found</p>
+{% endif %}
 </body>
 </html>
