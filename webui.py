@@ -1,20 +1,10 @@
-from threading import Thread
-from webbrowser import open
-from flask import Flask, request, render_template, redirect, url_for
-import re
+from flask import Flask, request, render_template, redirect
+import utils
 from os import path, startfile
 from foogle import Foogle
 
 app = Flask(__name__)
-foogle = Foogle()
-
-
-def highlight_keywords(text, keywords):
-    for word in keywords:
-        pattern = re.compile(r'\b{}\b'.format(re.escape(word)), re.IGNORECASE)
-        text = pattern.sub(f'<span class="highlight">{word}</span>', text)
-
-    return text
+engine = Foogle()
 
 
 @app.errorhandler(404)
@@ -41,14 +31,13 @@ def search():
 
         if query:
             if logic == 'and':
-                results = foogle.search(query, rank=rank)
+                results = engine.search(query, rank=rank)
             elif logic == 'or':
-                results = foogle.search_or(query, rank=rank)
+                results = engine.search_or(query, rank=rank)
 
             keywords = query.split()
-
             for result in results:
-                result.snippet = highlight_keywords(result.snippet, keywords)
+                result.snippet = utils.Utils.highlight_keywords(result.snippet, keywords)
 
     return render_template('foogle.html', query=query, results=results, rank=rank, logic=logic)
 
