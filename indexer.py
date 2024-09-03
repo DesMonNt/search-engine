@@ -1,28 +1,26 @@
-import re
+from utils import Utils
 
 
 class Indexer:
     def __init__(self, stopwords=None):
-        self._word_splitters = {' ', '.', ',', '!', '?', ':', '-', '\r', '\n'}
         self._words_indexes = dict()
         self._words_in_documents = dict()
         self._stopwords = set()
-
-        self.split_pattern = '|'.join(map(re.escape, self._word_splitters))
 
         if stopwords:
             self._load_stopwords(stopwords)
 
     def add(self, document):
-        split_words = re.split(self.split_pattern, document.content)
-        word_index = 0
+        split_words = Utils.split_words(document.content)
 
         if document.id not in self._words_in_documents:
             self._words_in_documents[document.id] = []
 
+        word_index = 0
         for word in split_words:
+            # if len(word) == 0:
+            #   continue
             word = word.lower()
-
             if word in self._stopwords:
                 word_index += len(word) + 1
                 continue
