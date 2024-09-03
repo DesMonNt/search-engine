@@ -29,7 +29,10 @@ def search():
         logic = request.form.get('logic', 'and')
 
         if query:
-            keywords = list(filter(lambda x: len(x) > 0, Utils.split_words(query.lower())))[:40]
+            keywords = Utils.split_query_using_keywords(
+                list(filter(lambda x: len(x) > 0, Utils.split_words(query.lower())))[:40]
+            )
+
             if logic == 'and':
                 results = engine.search(keywords, rank=rank)
             elif logic == 'or':
