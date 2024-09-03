@@ -6,7 +6,8 @@ from search_engine import SearchEngine
 
 
 class Foogle:
-    def __init__(self, root='', extensions=os.path.join('configs', 'extensions'), stopwords=os.path.join('configs', 'stopwords')):
+    def __init__(self, root='', extensions=os.path.join('configs', 'extensions'),
+                 stopwords=os.path.join('configs', 'stopwords')):
         self.documents = dict()
         self.root = root
         self.extensions = Foogle._read_extensions(extensions)
