@@ -3,14 +3,13 @@ import logging
 from document import Document
 from search_result import SearchResult
 from search_engine import SearchEngine
+from utils import Utils
 
 
 class Foogle:
-    def __init__(self, root='', extensions=os.path.join('configs', 'extensions'),
-                 stopwords=os.path.join('configs', 'stopwords')):
+    def __init__(self, root='.', stopwords=os.path.join('configs', 'stopwords')):
         self.documents = dict()
         self.root = root
-        self.extensions = Foogle._read_extensions(extensions)
         self.search_engine = SearchEngine(stopwords)
         self._add_files_to_index()
 
@@ -39,9 +38,6 @@ class Foogle:
 
         return snippet
 
-    def _is_valid_extension(self, file_name):
-        return any(file_name.endswith(ext) for ext in self.extensions)
-
     def _search(self, keywords, docs_ids, logic):
         result = []
 
@@ -67,14 +63,13 @@ class Foogle:
 
         for root, dirs, files in os.walk(self.root):
             for file_name in files:
-
-                if not self._is_valid_extension(file_name):
+                path = os.path.join(root, file_name)
+                encoding = Utils.get_file_encoding(path)
+                if not encoding:
                     continue
 
                 try:
-                    path = os.path.join(root, file_name)
-
-                    with open(path, 'r', encoding='utf-8') as f:
+                    with open(path, 'r', encoding=encoding) as f:
                         content = f.read()
                         document = Document(document_id, path, content)
 
@@ -88,8 +83,3 @@ class Foogle:
 
                 except PermissionError as e:
                     logging.warning(f"{file_name}, error: {e}")
-
-    @staticmethod
-    def _read_extensions(file_path):
-        with open(file_path, 'r') as file:
-            return set(line.strip() for line in file.readlines())
