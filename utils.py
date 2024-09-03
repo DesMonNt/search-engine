@@ -1,5 +1,5 @@
 import re
-import chardet
+from charset_normalizer import from_path
 
 
 class Utils:
@@ -20,18 +20,16 @@ class Utils:
         return text
 
     @staticmethod
-    def is_text_file(file_path: str) -> bool:
+    def get_file_encoding(file_path: str) -> str | None:
         try:
-            with open(file_path, 'rb') as file:
-                raw_data = file.read(1024)
+            result = from_path(file_path).best()
+            if not result:
+                return
 
-            encoding = chardet.detect(raw_data)['encoding']
-            if not encoding:
-                return False
-
+            encoding = result.encoding
             with open(file_path, 'r', encoding=encoding) as file:
                 file.read(1024)
 
-            return True
+            return encoding
         except (UnicodeDecodeError, IOError):
-            return False
+            return
