@@ -14,11 +14,12 @@ class Foogle:
         self.search_engine = SearchEngine(stopwords)
         self._add_files_to_index()
 
-    def search(self, keywords, rank=False):
-        return self._search(keywords, self.search_engine.search(keywords, rank=rank))
-
-    def search_or(self, keywords, rank=False):
-        return self._search(keywords, self.search_engine.search_or(keywords, rank=rank))
+    def search(self, keywords, logic, rank=False):
+        if logic == 'and':
+            return self._search(keywords, self.search_engine.search_and(keywords, rank=rank), logic)
+        elif logic == 'or':
+            return self._search(keywords, self.search_engine.search_or(keywords, rank=rank), logic)
+        return self._search(keywords, self.search_engine.search_not(keywords), logic)
 
     def _get_snippet(self, keywords, doc_id, length=200):
         positions = []
@@ -41,7 +42,7 @@ class Foogle:
     def _is_valid_extension(self, file_name):
         return any(file_name.endswith(ext) for ext in self.extensions)
 
-    def _search(self, keywords, docs_ids):
+    def _search(self, keywords, docs_ids, logic):
         result = []
 
         for doc_id in docs_ids:
@@ -53,7 +54,11 @@ class Foogle:
                 del self.documents[doc_id]
                 continue
 
-            result.append(SearchResult(self.documents[doc_id].title, self._get_snippet(keywords, doc_id)))
+            if logic == 'not':
+                snippet = str()
+            else:
+                snippet = self._get_snippet(keywords, doc_id)
+            result.append(SearchResult(self.documents[doc_id].title, snippet))
 
         return result
 

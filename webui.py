@@ -30,10 +30,7 @@ def search():
 
         if query:
             keywords = list(filter(lambda x: len(x) > 0, Utils.split_words(query.lower())))[:40]
-            if logic == 'and':
-                results = engine.search(keywords, rank=rank)
-            elif logic == 'or':
-                results = engine.search_or(keywords, rank=rank)
+            results = engine.search(keywords, logic, rank=rank)
             for result in results:
                 result.snippet = Utils.highlight_keywords(result.snippet, keywords)
 

@@ -59,6 +59,9 @@ class Indexer:
     def get_total_documents(self):
         return len(self._words_in_documents)
 
+    def get_all_documents(self):
+        return set(self._words_in_documents.keys())
+
     def _load_stopwords(self, filepath):
         with open(filepath, 'r') as file:
             for line in file:
