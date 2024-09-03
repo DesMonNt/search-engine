@@ -25,11 +25,10 @@ class RelevanceRanker:
 
         return idf_value
 
-    def rank_documents(self, query, document_ids):
-        query_words = query.split()
+    def rank_documents(self, keywords, document_ids):
         doc_scores = defaultdict(float)
 
-        for word in query_words:
+        for word in keywords:
             idf = self.calculate_idf(word)
 
             for doc_id in document_ids:

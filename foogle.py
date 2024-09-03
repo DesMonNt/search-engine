@@ -6,29 +6,27 @@ from search_engine import SearchEngine
 
 
 class Foogle:
-    def __init__(self, root='/.', extensions=os.path.join('configs', 'extensions'), stopwords=os.path.join('configs', 'stopwords')):
+    def __init__(self, root='', extensions=os.path.join('configs', 'extensions'), stopwords=os.path.join('configs', 'stopwords')):
         self.documents = dict()
         self.root = root
         self.extensions = Foogle._read_extensions(extensions)
         self.search_engine = SearchEngine(stopwords)
         self._add_files_to_index()
 
-    def search(self, query, rank=False):
-        return self._search(query, self.search_engine.search(query, rank=rank))
+    def search(self, keywords, rank=False):
+        return self._search(keywords, self.search_engine.search(keywords, rank=rank))
 
-    def search_or(self, query, rank=False):
-        return self._search(query, self.search_engine.search_or(query, rank=rank))
+    def search_or(self, keywords, rank=False):
+        return self._search(keywords, self.search_engine.search_or(keywords, rank=rank))
 
-    def _get_snippet(self, query, doc_id, length=200):
-        words = query.lower().split()
+    def _get_snippet(self, keywords, doc_id, length=200):
         positions = []
-
-        for word in words:
+        for word in keywords:
             positions.extend(self.search_engine.indexer.get_positions(doc_id, word))
 
         content = self.documents[doc_id].content
         start = max(positions[0] - length // 2, 0)
-        end = min(positions[0] + len(query) + length // 2, len(content))
+        end = min(positions[0] + len(' '.join(keywords)) + length // 2, len(content))
         snippet = content[start:end]
 
         if start > 0:
@@ -42,7 +40,7 @@ class Foogle:
     def _is_valid_extension(self, file_name):
         return any(file_name.endswith(ext) for ext in self.extensions)
 
-    def _search(self, query, docs_ids):
+    def _search(self, keywords, docs_ids):
         result = []
 
         for doc_id in docs_ids:
@@ -54,7 +52,7 @@ class Foogle:
                 del self.documents[doc_id]
                 continue
 
-            result.append(SearchResult(self.documents[doc_id].title, self._get_snippet(query, doc_id)))
+            result.append(SearchResult(self.documents[doc_id].title, self._get_snippet(keywords, doc_id)))
 
         return result
 

@@ -1,5 +1,5 @@
 from flask import Flask, request, render_template, redirect
-import utils
+from utils import Utils
 from os import path, startfile
 from foogle import Foogle
 
@@ -19,8 +19,7 @@ def internal(e):
 
 @app.route('/', methods=['GET', 'POST'])
 def search():
-    query = ""
-    results = []
+    keywords, results = [], []
     rank = False
     logic = 'and'
 
@@ -30,16 +29,15 @@ def search():
         logic = request.form.get('logic', 'and')
 
         if query:
+            keywords = list(filter(lambda x: len(x) > 0, Utils.split_words(query.lower())))[:40]
             if logic == 'and':
-                results = engine.search(query, rank=rank)
+                results = engine.search(keywords, rank=rank)
             elif logic == 'or':
-                results = engine.search_or(query, rank=rank)
-
-            keywords = query.split()
+                results = engine.search_or(keywords, rank=rank)
             for result in results:
-                result.snippet = utils.Utils.highlight_keywords(result.snippet, keywords)
+                result.snippet = Utils.highlight_keywords(result.snippet, keywords)
 
-    return render_template('foogle.html', query=query, results=results, rank=rank, logic=logic)
+    return render_template('foogle.html', query=' '.join(keywords), results=results, rank=rank, logic=logic)
 
 
 @app.route('/file/<path:filepath>', methods=['GET'])
