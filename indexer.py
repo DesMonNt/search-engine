@@ -18,8 +18,8 @@ class Indexer:
 
         word_index = 0
         for word in split_words:
-            # if len(word) == 0:
-            #   continue
+            if len(word) == 0:
+                continue
             word = word.lower()
             if word in self._stopwords:
                 word_index += len(word) + 1
