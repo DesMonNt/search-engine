@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, jsonify
+from flask import Flask, request, render_template, redirect
 from utils import Utils
 from os import path, startfile
 from foogle import Foogle
@@ -52,7 +52,7 @@ def search():
 
 @app.route('/file/<path:filepath>', methods=['GET'])
 def open_file(filepath: str):
-    if path.isfile(filepath):
+    if path.isfile(filepath) and client and Utils.is_file_in_folder(filepath, client.root):
         startfile(filepath)
         return "file is opening"
     return redirect('/')

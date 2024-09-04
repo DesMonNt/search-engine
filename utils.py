@@ -1,5 +1,6 @@
 import re
 from charset_normalizer import from_path
+from os import path
 
 
 class Utils:
@@ -33,3 +34,13 @@ class Utils:
             return encoding
         except (UnicodeDecodeError, IOError):
             return
+
+    @staticmethod
+    def is_file_in_folder(file_path: str, folder_path: str) -> bool:
+        file_path = path.abspath(file_path)
+        folder_path = path.abspath(folder_path)
+
+        if not path.isfile(file_path) or not path.isdir(folder_path):
+            return False
+
+        return path.commonpath([file_path, folder_path]) == folder_path
