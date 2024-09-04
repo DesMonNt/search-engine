@@ -4,36 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Foogle Indexer</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/indexer.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/foogle.css') }}">
 </head>
-<body onload="displayDirectoryPath()">
+<body>
 <h1>FOOGLE</h1>
-<form action="/" method="POST" enctype="multipart/form-data">
+<form method="POST" action="/">
     <div class="search-container">
-        <div class="select-container">
-            <button type="button" onclick="document.getElementById('file').click();" style="display: inline-block;">
-                Select
-            </button>
-            <p id="directoryPath" style="display: inline-block;"></p>
-        </div>
-        <button type="submit" class="submit-button">Index directory</button>
+        <input type="text" name="path" value="{{ path }}" placeholder="Enter folder path">
+        <button type="submit">Index</button>
     </div>
-    <input type="file" id="file" name="file[]" webkitdirectory multiple onchange="displayDirectoryPath()" style="display:none;">
 </form>
-
-<script>
-    function displayDirectoryPath() {
-        const input = document.getElementById('file');
-        const directoryPath = document.getElementById('directoryPath');
-
-        if (input.files.length > 0) {
-            const fullPath = input.files[0].webkitRelativePath;
-            const path = fullPath.substring(0, fullPath.indexOf('/'));
-            directoryPath.textContent = `Directory: ${path}`;
-        } else {
-            directoryPath.textContent = 'No directory';
-        }
-    }
-</script>
 </body>
 </html>

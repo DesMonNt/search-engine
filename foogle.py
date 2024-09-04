@@ -7,7 +7,7 @@ from utils import Utils
 
 
 class Foogle:
-    def __init__(self, root='.', stopwords=os.path.join('configs', 'stopwords')):
+    def __init__(self, root='', stopwords=os.path.join('configs', 'stopwords')):
         self.documents = dict()
         self.root = root
         self.search_engine = SearchEngine(stopwords)
