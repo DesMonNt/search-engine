@@ -4,7 +4,7 @@ from os import path, startfile
 from foogle import Foogle
 
 app = Flask(__name__)
-engine = Foogle()
+client = Foogle()
 
 
 @app.errorhandler(404)
@@ -23,6 +23,11 @@ def search():
     rank = False
     logic = 'and'
 
+    if not client.documents:
+        if request.method == 'POST':
+            pass
+        return render_template('indexer.html')
+
     if request.method == 'POST':
         query = request.form.get('query', '').strip()
         rank = 'rank' in request.form
@@ -30,7 +35,7 @@ def search():
 
         if query:
             keywords = list(filter(lambda x: len(x) > 0, Utils.split_words(query.lower())))[:40]
-            results = engine.search(keywords, logic, rank=rank)
+            results = client.search(keywords, logic, rank=rank)
             for result in results:
                 result.snippet = Utils.highlight_keywords(result.snippet, keywords)
 
