@@ -1,32 +1,40 @@
-from flask import Flask, request, render_template, redirect
+from flask import Flask, request, render_template, redirect, jsonify
 from utils import Utils
 from os import path, startfile
 from foogle import Foogle
 
 app = Flask(__name__)
-client = Foogle()
+client = None
 
 
 @app.errorhandler(404)
-def page_not_found(e):
+def page_not_found(_):
     return redirect('/')
 
 
 @app.errorhandler(500)
-def internal(e):
+def internal(_):
     return redirect('/')
 
 
 @app.route('/', methods=['GET', 'POST'])
 def search():
+    global client
+
     keywords, results = [], []
     rank = False
     logic = 'and'
+    folder_path = str()
 
-    if not client.documents:
+    if not client:
         if request.method == 'POST':
-            pass
-        return render_template('indexer.html')
+            folder_path = request.form.get('path', '').strip()
+            if not path.isdir(folder_path):
+                return redirect('/')
+            client = Foogle(root=folder_path)
+            return redirect('/')
+
+        return render_template('indexer.html', path=folder_path)
 
     if request.method == 'POST':
         query = request.form.get('query', '').strip()
