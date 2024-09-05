@@ -65,12 +65,16 @@ class Foogle:
         for root, dirs, files in os.walk(self.root):
             for file_name in files:
                 path = os.path.join(root, file_name)
-                encoding = Utils.get_file_encoding(path)
-                if not encoding:
+
+                if self.encoding == 'auto':
+                    file_encoding = Utils.get_file_encoding(path)
+                else:
+                    file_encoding = self.encoding
+                if not file_encoding:
                     continue
 
                 try:
-                    with open(path, 'r', encoding=encoding) as f:
+                    with open(path, 'r', encoding=file_encoding) as f:
                         content = f.read()
                         document = Document(document_id, path, content)
 

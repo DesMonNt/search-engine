@@ -9,7 +9,7 @@ import multiprocessing
 app = Flask(__name__)
 
 with open(path.join('config', 'encodings'), 'r') as file:
-    encodings = file.read().split()
+    encodings = ['auto'] + file.read().split()
 client = None
 
 
@@ -34,11 +34,11 @@ def search():
 
     if not client:
         if request.method == 'POST':
-            folder_path = request.form.get('folderPath').strip()
-            encoding = request.form.get('encoding').strip()
+            folder_path = request.form.get('folderPath', '')
+            encoding = request.form.get('encoding', 'auto').strip()
             if not path.exists(folder_path):
                 return redirect('/')
-            client = Foogle(root=folder_path)
+            client = Foogle(root=folder_path, encoding=encoding)
             return redirect('/')
 
         return render_template('indexer.html', path=folder_path, dropdown_list=encodings)
