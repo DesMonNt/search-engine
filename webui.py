@@ -7,6 +7,9 @@ from tkinter import filedialog
 import multiprocessing
 
 app = Flask(__name__)
+
+with open(path.join('config', 'encodings'), 'r') as file:
+    encodings = file.read().split()
 client = None
 
 
@@ -38,7 +41,7 @@ def search():
             client = Foogle(root=folder_path)
             return redirect('/')
 
-        return render_template('indexer.html', path=folder_path, dropdown_list=['utf-8', 'windows-1251'])
+        return render_template('indexer.html', path=folder_path, dropdown_list=encodings)
 
     if request.method == 'POST':
         query = request.form.get('query', '').strip()

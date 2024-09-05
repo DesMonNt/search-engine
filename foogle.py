@@ -7,10 +7,11 @@ from utils import Utils
 
 
 class Foogle:
-    def __init__(self, root='', stopwords=os.path.join('configs', 'stopwords')):
+    def __init__(self, root='', encoding='utf-8', stopwords_path=os.path.join('config', 'stopwords')):
         self.documents = dict()
         self.root = root
-        self.search_engine = SearchEngine(stopwords)
+        self.encoding = encoding
+        self.search_engine = SearchEngine(stopwords_path)
         self._add_files_to_index()
 
     def search(self, keywords, logic, rank=False):
