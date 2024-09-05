@@ -29,7 +29,7 @@ class Utils:
 
             encoding = result.encoding
             with open(file_path, 'r', encoding=encoding) as file:
-                file.read(1024)
+                file.read(128)
 
             return encoding
         except (UnicodeDecodeError, IOError):
