@@ -1,7 +1,10 @@
-from flask import Flask, request, render_template, redirect
+from flask import Flask, request, render_template, redirect, jsonify
 from utils import Utils
 from os import path, startfile
 from foogle import Foogle
+import tkinter as tk
+from tkinter import filedialog
+import multiprocessing
 
 app = Flask(__name__)
 client = None
@@ -28,8 +31,8 @@ def search():
 
     if not client:
         if request.method == 'POST':
-            folder_path = request.form.get('path', '').strip()
-            if not path.isdir(folder_path):
+            folder_path = request.form.get('folderPath').strip()
+            if not path.exists(folder_path):
                 return redirect('/')
             client = Foogle(root=folder_path)
             return redirect('/')
@@ -58,5 +61,27 @@ def open_file(filepath: str):
     return redirect('/')
 
 
+def open_folder_dialog(queue: multiprocessing.Queue):
+    window = tk.Tk()
+    window.withdraw()
+    queue.put(filedialog.askdirectory())
+    window.destroy()
+
+
+@app.route('/select-folder', methods=['GET'])
+def select_folder():
+    if client:
+        return redirect('/')
+
+    queue = multiprocessing.Queue()
+
+    tkinter_process = multiprocessing.Process(target=open_folder_dialog, args=(queue,))
+    tkinter_process.start()
+    tkinter_process.join()
+    tkinter_process.terminate()
+
+    return jsonify({'path': queue.get()})
+
+
 if __name__ == "__main__":
-    app.run(debug=False, use_reloader=False)
+    app.run(debug=True, use_reloader=False)
