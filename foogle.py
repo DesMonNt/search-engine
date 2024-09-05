@@ -1,27 +1,29 @@
-import os
 import logging
+import os
+
 from document import Document
-from search_result import SearchResult
 from search_engine import SearchEngine
+from search_result import SearchResult
 from utils import Utils
 
 
 class Foogle:
-    def __init__(self, root='', encoding='utf-8', stopwords_path=os.path.join('config', 'stopwords')):
+    def __init__(self, root: str = '', encoding: str = 'utf-8',
+                 stopwords_path: str = os.path.join('config', 'stopwords')):
         self.documents = dict()
         self.root = root
         self.encoding = encoding
         self.search_engine = SearchEngine(stopwords_path)
         self._add_files_to_index()
 
-    def search(self, keywords, logic, rank=False):
+    def search(self, keywords: list[str], logic: str, rank=False) -> list[SearchResult]:
         if logic == 'and':
             return self._search(keywords, self.search_engine.search_and(keywords, rank=rank), logic)
         elif logic == 'or':
             return self._search(keywords, self.search_engine.search_or(keywords, rank=rank), logic)
         return self._search(keywords, self.search_engine.search_not(keywords), logic)
 
-    def _get_snippet(self, keywords, doc_id, length=200):
+    def _get_snippet(self, keywords: list[str], doc_id: int, length: int = 200) -> str:
         positions = []
         for word in keywords:
             positions.extend(self.search_engine.indexer.get_positions(doc_id, word))
@@ -39,7 +41,7 @@ class Foogle:
 
         return snippet
 
-    def _search(self, keywords, docs_ids, logic):
+    def _search(self, keywords: list[str], docs_ids: list[int], logic: str) -> list[SearchResult]:
         result = []
 
         for doc_id in docs_ids:
@@ -59,7 +61,7 @@ class Foogle:
 
         return result
 
-    def _add_files_to_index(self):
+    def _add_files_to_index(self) -> None:
         document_id = 1
 
         for root, dirs, files in os.walk(self.root):

@@ -1,19 +1,21 @@
-from math import log
 from collections import defaultdict
+from math import log
+
+from indexer import Indexer
 
 
 class RelevanceRanker:
-    def __init__(self, indexer):
+    def __init__(self, indexer: Indexer):
         self.indexer = indexer
         self.idf_cache = {}
 
-    def calculate_tf(self, word, document_id):
+    def calculate_tf(self, word: str, document_id: int) -> float:
         word_positions = self.indexer.get_positions(document_id, word)
         num_terms = len(self.indexer.get_words_in_document(document_id))
 
         return len(word_positions) / num_terms
 
-    def calculate_idf(self, word):
+    def calculate_idf(self, word: str) -> float:
         if word in self.idf_cache:
             return self.idf_cache[word]
 
@@ -25,7 +27,7 @@ class RelevanceRanker:
 
         return idf_value
 
-    def rank_documents(self, keywords, document_ids):
+    def rank_documents(self, keywords: list[str], document_ids: list[int]) -> int:
         doc_scores = defaultdict(float)
 
         for word in keywords:

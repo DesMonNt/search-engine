@@ -1,16 +1,18 @@
-from flask import Flask, request, render_template, redirect, jsonify
-from utils import Utils
-from os import path, startfile
-from foogle import Foogle
-import tkinter as tk
-from tkinter import filedialog
 import multiprocessing
+import tkinter as tk
+from os import path, startfile
+from tkinter import filedialog
+
+from flask import Flask, jsonify, redirect, render_template, request
+
+from foogle import Foogle
+from utils import Utils
 
 app = Flask(__name__)
 
 with open(path.join('config', 'encodings'), 'r') as file:
     encodings = ['auto'] + file.read().split()
-client = None
+client: Foogle | None = None
 
 
 @app.errorhandler(404)

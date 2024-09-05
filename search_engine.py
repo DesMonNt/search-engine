@@ -1,16 +1,17 @@
-from relevance_ranker import RelevanceRanker
+from document import Document
 from indexer import Indexer
+from relevance_ranker import RelevanceRanker
 
 
 class SearchEngine:
-    def __init__(self, stopwords):
-        self.indexer = Indexer(stopwords)
+    def __init__(self, stopwords_path: str):
+        self.indexer = Indexer(stopwords_path)
         self.ranker = RelevanceRanker(self.indexer)
 
-    def add_document(self, document):
+    def add_document(self, document: Document) -> None:
         self.indexer.add(document)
 
-    def search_and(self, keywords, rank=False):
+    def search_and(self, keywords: list[str], rank: bool = False) -> list[int]:
         if not keywords:
             return []
 
@@ -29,7 +30,7 @@ class SearchEngine:
 
         return result_docs
 
-    def search_or(self, keywords, rank=False):
+    def search_or(self, keywords: list[str], rank: bool = False) -> list[int]:
         if not keywords:
             return []
 
@@ -45,7 +46,7 @@ class SearchEngine:
 
         return result_docs
 
-    def search_not(self, keywords):
+    def search_not(self, keywords: list[str]) -> list[int]:
         if not keywords:
             return []
 
@@ -56,5 +57,5 @@ class SearchEngine:
 
         return list(result_docs)
 
-    def remove(self, doc_id):
+    def remove(self, doc_id: int) -> None:
         self.indexer.remove(doc_id)
