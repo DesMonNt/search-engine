@@ -8,16 +8,25 @@
 </head>
 <body>
 <h1>FOOGLE</h1>
+
 <form action="/" method="POST" enctype="multipart/form-data">
     <div class="search-container">
         <div class="select-container">
             <button type="button" id="selectFolderButton" style="display: inline-block;">Select</button>
             <p id="directoryPath" style="display: inline-block;">Directory: None</p>
         </div>
-        <input type="hidden" id="folderPathInput" name="folderPath">
+        <label class="select-container">
+            <select style="font-size: 1em" name="encoding">
+                {% for each in dropdown_list %}
+                    <option value="{{ each }}">{{ each }}</option>
+                {% endfor %}
+            </select>
+        </label>
         <button type="submit" class="submit-button">Index directory</button>
     </div>
+    <input type="hidden" id="folderPathInput" name="folderPath">
 </form>
+
 <script type="text/javascript">
     document.getElementById('selectFolderButton').addEventListener('click', function () {
         fetch('/select-folder')

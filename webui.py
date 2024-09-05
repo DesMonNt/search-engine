@@ -32,12 +32,13 @@ def search():
     if not client:
         if request.method == 'POST':
             folder_path = request.form.get('folderPath').strip()
+            encoding = request.form.get('encoding').strip()
             if not path.exists(folder_path):
                 return redirect('/')
             client = Foogle(root=folder_path)
             return redirect('/')
 
-        return render_template('indexer.html', path=folder_path)
+        return render_template('indexer.html', path=folder_path, dropdown_list=['utf-8', 'windows-1251'])
 
     if request.method == 'POST':
         query = request.form.get('query', '').strip()
