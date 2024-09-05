@@ -1,6 +1,7 @@
 import re
-from charset_normalizer import from_path
 from os import path
+
+from charset_normalizer import from_path
 
 
 class Utils:
@@ -12,7 +13,7 @@ class Utils:
         return re.split(Utils.split_pattern, string)
 
     @staticmethod
-    def highlight_keywords(text, keywords):
+    def highlight_keywords(text: str, keywords: list[str]) -> str:
         for word in keywords:
             word = word.strip('"').strip("'")
             pattern = re.compile(r'\b{}\b'.format(re.escape(word)), re.IGNORECASE)

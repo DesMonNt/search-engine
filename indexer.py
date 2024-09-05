@@ -1,16 +1,17 @@
+from document import Document
 from utils import Utils
 
 
 class Indexer:
-    def __init__(self, stopwords=None):
+    def __init__(self, stopwords_path: str | None = None):
         self._words_indexes = dict()
         self._words_in_documents = dict()
         self._stopwords = set()
 
-        if stopwords:
-            self._load_stopwords(stopwords)
+        if stopwords_path:
+            self._load_stopwords(stopwords_path)
 
-    def add(self, document):
+    def add(self, document: Document) -> None:
         split_words = Utils.split_words(document.content)
 
         if document.id not in self._words_in_documents:
@@ -18,8 +19,6 @@ class Indexer:
 
         word_index = 0
         for word in split_words:
-            # if len(word) == 0:
-            #   continue
             word = word.lower()
             if word in self._stopwords:
                 word_index += len(word) + 1
@@ -36,7 +35,7 @@ class Indexer:
 
             word_index += len(word) + 1
 
-    def remove(self, doc_id):
+    def remove(self, doc_id: int) -> None:
         if doc_id in self._words_in_documents:
             words = self._words_in_documents[doc_id]
 
@@ -46,23 +45,23 @@ class Indexer:
 
             del self._words_in_documents[doc_id]
 
-    def get_ids(self, word):
+    def get_ids(self, word: str) -> list[int]:
         return list(self._words_indexes.get(word, {}).keys())
 
-    def get_positions(self, document_id, word):
+    def get_positions(self, document_id: int, word: str) -> list[int]:
         indexes = self._words_indexes.get(word, {})
         return indexes.get(document_id, [])
 
-    def get_words_in_document(self, document_id):
+    def get_words_in_document(self, document_id: int) -> list[Document]:
         return self._words_in_documents.get(document_id, [])
 
-    def get_total_documents(self):
+    def get_total_documents(self) -> int:
         return len(self._words_in_documents)
 
-    def get_all_documents(self):
+    def get_all_documents(self) -> set[int]:
         return set(self._words_in_documents.keys())
 
-    def _load_stopwords(self, filepath):
+    def _load_stopwords(self, filepath: str) -> None:
         with open(filepath, 'r') as file:
             for line in file:
                 self._stopwords.add(line.strip().lower())
