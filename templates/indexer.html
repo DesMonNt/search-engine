@@ -4,15 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Foogle Indexer</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/foogle.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/indexer.css') }}">
 </head>
 <body>
 <h1>FOOGLE</h1>
-<form method="POST" action="/">
+<form action="/" method="POST" enctype="multipart/form-data">
     <div class="search-container">
-        <input type="text" name="path" value="{{ path }}" placeholder="Enter folder path">
-        <button type="submit">Index</button>
+        <div class="select-container">
+            <button type="button" id="selectFolderButton" style="display: inline-block;">Select</button>
+            <p id="directoryPath" style="display: inline-block;">Directory: None</p>
+        </div>
+        <input type="hidden" id="folderPathInput" name="folderPath">
+        <button type="submit" class="submit-button">Index directory</button>
     </div>
 </form>
+<script type="text/javascript">
+    document.getElementById('selectFolderButton').addEventListener('click', function () {
+        fetch('/select-folder')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('directoryPath').innerText = "Directory: " + data.path;
+                document.getElementById('folderPathInput').value = data.path;
+            })
+            .catch(error => console.error('Error:', error));
+    });
+</script>
 </body>
 </html>
