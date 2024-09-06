@@ -1,10 +1,10 @@
 import logging
 import os
 
-from document import Document
-from search_engine import SearchEngine
-from search_result import SearchResult
-from utils import Utils
+from foogle.document import Document
+from foogle.search_engine import SearchEngine
+from foogle.search_result import SearchResult
+from foogle.utils import Utils
 
 
 class Foogle:

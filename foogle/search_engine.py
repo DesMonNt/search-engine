@@ -1,6 +1,6 @@
-from document import Document
-from indexer import Indexer
-from relevance_ranker import RelevanceRanker
+from foogle.document import Document
+from foogle.indexer import Indexer
+from foogle.relevance_ranker import RelevanceRanker
 
 
 class SearchEngine:
