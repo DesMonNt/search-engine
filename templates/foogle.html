@@ -24,8 +24,11 @@
     </script>
 </head>
 <body onload="toggleRank()">
+<form action="/back">
+    <button type="submit">Back</button>
+</form>
 <h1>FOOGLE</h1>
-<form method="POST" action="/">
+<form class="search" method="POST" action="/">
     <div class="search-container">
         <input type="text" name="query" value="{{ query }}" placeholder="Enter your search query">
         <button type="submit">Search</button>
