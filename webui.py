@@ -84,7 +84,7 @@ def select_folder():
     tkinter_process = multiprocessing.Process(target=open_folder_dialog, args=(queue,))
     tkinter_process.start()
     tkinter_process.join()
-    tkinter_process.terminate()
+    tkinter_process.close()
 
     return jsonify({'path': queue.get()})
 
