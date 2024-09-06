@@ -1,7 +1,7 @@
 from collections import defaultdict
 from math import log
 
-from indexer import Indexer
+from foogle.indexer import Indexer
 
 
 class RelevanceRanker:

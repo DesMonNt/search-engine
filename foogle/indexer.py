@@ -1,5 +1,5 @@
-from document import Document
-from utils import Utils
+from foogle.document import Document
+from foogle.utils import Utils
 
 
 class Indexer:

@@ -5,8 +5,8 @@ from tkinter import filedialog
 
 from flask import Flask, jsonify, redirect, render_template, request
 
-from foogle import Foogle
-from utils import Utils
+from foogle.foogle import Foogle
+from foogle.utils import Utils
 
 app = Flask(__name__)
 
