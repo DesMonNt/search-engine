@@ -89,5 +89,12 @@ def select_folder():
     return jsonify({'path': queue.get()})
 
 
+@app.route('/back', methods=['GET'])
+def back():
+    global client
+    client = None
+    return redirect('/')
+
+
 if __name__ == "__main__":
     app.run(debug=True, use_reloader=False)
