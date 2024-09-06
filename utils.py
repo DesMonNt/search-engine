@@ -1,12 +1,12 @@
 import re
 from os import path
+from string import punctuation, whitespace
 
 from charset_normalizer import from_path
 
 
 class Utils:
-    word_splitters = {' ', '.', ',', '!', '?', ':', '-', '\r', '\n', '\t'}
-    split_pattern = '|'.join(map(re.escape, word_splitters))
+    split_pattern = '|'.join(map(re.escape, list(punctuation + whitespace)))
 
     @staticmethod
     def split_words(string: str) -> list[str]:
