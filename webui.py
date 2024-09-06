@@ -36,7 +36,7 @@ def search():
 
     if not client:
         if request.method == 'POST':
-            folder_path = request.form.get('folderPath', '')
+            folder_path = request.form.get('folderPath', '').strip()
             encoding = request.form.get('encoding', 'auto').strip()
             if not path.exists(folder_path):
                 return redirect('/')
