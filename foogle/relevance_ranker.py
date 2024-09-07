@@ -29,7 +29,7 @@ class RelevanceRanker:
         self.idf_cache[word] = idf_value
         return idf_value
 
-    def rank_documents(self, keywords: list[str], document_ids: list[int]) -> int:
+    def rank_documents(self, keywords: list[str], document_ids: list[int]) -> list[int]:
         doc_scores = defaultdict(float)
 
         for word in keywords:

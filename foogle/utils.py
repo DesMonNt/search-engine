@@ -18,8 +18,8 @@ class Utils:
             if not keywords:
                 return []
             return method(keywords, *args, **kwargs)
-        return wrapper
 
+        return wrapper
 
     @staticmethod
     def highlight_keywords(text: str, keywords: list[str]) -> str:
