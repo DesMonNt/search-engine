@@ -1,14 +1,14 @@
 import pytest
-from search_engine import SearchEngine
-from document import Document
+from foogle.search_engine import SearchEngine
+from foogle.document import Document
 
 
 @pytest.fixture
 def search_engine(mocker):
-    mocker.patch('search_engine.Indexer')
-    mocker.patch('search_engine.RelevanceRanker')
+    mocker.patch('foogle.search_engine.Indexer')
+    mocker.patch('foogle.search_engine.RelevanceRanker')
 
-    engine = SearchEngine(stopwords="stopwords.txt")
+    engine = SearchEngine(stopwords_path="stopwords")
     return engine
 
 

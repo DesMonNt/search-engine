@@ -1,5 +1,5 @@
 import pytest
-from document import Document
+from foogle.document import Document
 
 
 def test_document_creation():

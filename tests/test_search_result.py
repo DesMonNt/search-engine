@@ -1,6 +1,6 @@
 import pytest
 from os import path
-from search_result import SearchResult
+from foogle.search_result import SearchResult
 
 
 def test_search_result_creation():
