@@ -46,7 +46,7 @@ UTF-8, ASCII, ISO-чего-то там... FOOGLE знает все эти код
 
 1. Клонируйте репозиторий FOOGLE:
     ```bash
-    git clone https://github.com/ваш-аккаунт/foogle.git
+    git clone https://github.com/DesMonNt/search-engine
     ```
 
 2. Перейдите в каталог проекта:
