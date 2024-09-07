@@ -20,11 +20,13 @@ class RelevanceRanker:
             return self.idf_cache[word]
 
         total_docs = self.indexer.get_total_documents()
+        if total_docs == 0:
+            return 0
+
         docs_with_word = len(self.indexer.get_ids(word))
-
         idf_value = log(total_docs / (1 + docs_with_word))
-        self.idf_cache[word] = idf_value
 
+        self.idf_cache[word] = idf_value
         return idf_value
 
     def rank_documents(self, keywords: list[str], document_ids: list[int]) -> int:

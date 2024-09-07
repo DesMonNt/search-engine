@@ -13,6 +13,15 @@ class Utils:
         return re.split(Utils.split_pattern, string)
 
     @staticmethod
+    def keywords_exist(method):
+        def wrapper(keywords: list[str], *args, **kwargs):
+            if not keywords:
+                return []
+            return method(keywords, *args, **kwargs)
+        return wrapper
+
+
+    @staticmethod
     def highlight_keywords(text: str, keywords: list[str]) -> str:
         for word in keywords:
             word = word.strip('"').strip("'")

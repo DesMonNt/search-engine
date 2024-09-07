@@ -1,6 +1,7 @@
 from foogle.document import Document
 from foogle.indexer import Indexer
 from foogle.relevance_ranker import RelevanceRanker
+from foogle.utils import Utils
 
 
 class SearchEngine:
@@ -11,10 +12,8 @@ class SearchEngine:
     def add_document(self, document: Document) -> None:
         self.indexer.add(document)
 
+    @Utils.keywords_exist
     def search_and(self, keywords: list[str], rank: bool = False) -> list[int]:
-        if not keywords:
-            return []
-
         result_docs = set(self.indexer.get_ids(keywords[0]))
 
         for word in keywords[1:]:
@@ -30,10 +29,8 @@ class SearchEngine:
 
         return result_docs
 
+    @Utils.keywords_exist
     def search_or(self, keywords: list[str], rank: bool = False) -> list[int]:
-        if not keywords:
-            return []
-
         result_docs = set(self.indexer.get_ids(keywords[0]))
 
         for word in keywords[1:]:
@@ -46,10 +43,8 @@ class SearchEngine:
 
         return result_docs
 
+    @Utils.keywords_exist
     def search_not(self, keywords: list[str]) -> list[int]:
-        if not keywords:
-            return []
-
         result_docs = self.indexer.get_all_documents()
 
         for word in keywords:
