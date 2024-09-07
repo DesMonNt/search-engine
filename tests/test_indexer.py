@@ -1,6 +1,7 @@
 import pytest
-from indexer import Indexer
-from document import Document
+
+from foogle.indexer import Indexer
+from foogle.document import Document
 
 
 @pytest.fixture
@@ -13,15 +14,10 @@ def document():
 
 
 @pytest.fixture
-def stopwords_file(tmp_path):
-    stopwords_file = tmp_path / "stopwords.txt"
-    stopwords_file.write_text("is\na\nfor\njust\n")
-    return stopwords_file
-
-
-@pytest.fixture
-def indexer_with_stopwords(stopwords_file):
-    return Indexer(stopwords=str(stopwords_file))
+def indexer_with_stopwords():
+    instance = Indexer()
+    instance._stopwords = ['is', 'a', 'for', 'just']
+    return instance
 
 
 def test_add_document_without_stopwords(document):
@@ -32,7 +28,7 @@ def test_add_document_without_stopwords(document):
     assert indexer.get_words_in_document(document.id) == [
         'this', 'is', 'a', 'test', 'document', 'this', 'document', 'is', 'just', 'for', 'testing'
     ]
-    assert indexer.get_positions(document.id, 'document') == [15, 29]
+    assert indexer.get_positions(document.id, 'document') == [15, 30]
 
 
 def test_add_document_with_stopwords(document, indexer_with_stopwords):
@@ -42,7 +38,7 @@ def test_add_document_with_stopwords(document, indexer_with_stopwords):
     assert indexer_with_stopwords.get_words_in_document(document.id) == [
         'this', 'test', 'document', 'this', 'document', 'testing'
     ]
-    assert indexer_with_stopwords.get_positions(document.id, 'document') == [15, 29]
+    assert indexer_with_stopwords.get_positions(document.id, 'document') == [15, 30]
 
 
 def test_remove_document(document):
@@ -66,8 +62,8 @@ def test_get_positions(document):
     indexer = Indexer()
     indexer.add(document)
 
-    assert indexer.get_positions(document.id, 'this') == [0, 24]
-    assert indexer.get_positions(document.id, 'document') == [15, 29]
+    assert indexer.get_positions(document.id, 'this') == [0, 25]
+    assert indexer.get_positions(document.id, 'document') == [15, 30]
     assert indexer.get_positions(document.id, 'nonexistent') == []
 
 

@@ -1,6 +1,6 @@
 import pytest
 from math import log
-from relevance_ranker import RelevanceRanker
+from foogle.relevance_ranker import RelevanceRanker
 
 
 @pytest.fixture
