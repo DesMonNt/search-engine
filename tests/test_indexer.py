@@ -1,7 +1,7 @@
 import pytest
 
-from foogle.indexer import Indexer
 from foogle.document import Document
+from foogle.indexer import Indexer
 
 
 @pytest.fixture

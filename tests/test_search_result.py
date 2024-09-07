@@ -1,5 +1,5 @@
-import pytest
 from os import path
+
 from foogle.search_result import SearchResult
 
 

@@ -1,4 +1,3 @@
-import pytest
 from foogle.document import Document
 
 

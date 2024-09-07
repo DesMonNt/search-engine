@@ -1,6 +1,7 @@
 import pytest
-from foogle.foogle import Foogle
+
 from foogle.document import Document
+from foogle.foogle import Foogle
 
 
 @pytest.fixture
@@ -58,7 +59,8 @@ def test_add_files_to_index(mocker, mock_utils, mock_search_engine):
 
 def test_get_snippet(foogle_instance, mocker):
     foogle_instance.search_engine.indexer.get_positions = mocker.Mock(return_value=[50])
-    foogle_instance.documents[1] = mocker.Mock(content="This is the content of a test document. It contains some keywords.")
+    foogle_instance.documents[1] = mocker.Mock(
+        content="This is the content of a test document. It contains some keywords.")
 
     snippet = foogle_instance._get_snippet(['test'], 1)
 
