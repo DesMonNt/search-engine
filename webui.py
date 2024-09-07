@@ -70,6 +70,7 @@ def open_file(filepath: str):
 def open_folder_dialog(queue: multiprocessing.Queue):
     window = tk.Tk()
     window.withdraw()
+    window.iconbitmap(path.join('static', 'ico', 'f.ico'))
     queue.put(filedialog.askdirectory())
     window.destroy()
 
