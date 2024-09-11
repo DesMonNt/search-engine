@@ -14,6 +14,7 @@ class Foogle:
         self.root = root
         self.encoding = encoding
         self.search_engine = SearchEngine(stopwords_path)
+        self.disallow_paths = Utils.read_disallow_index_file(os.path.join(root, 'robots.txt'))
         self._add_files_to_index()
 
     def search(self, keywords: list[str], logic: str, rank=False) -> list[SearchResult]:
@@ -65,8 +66,13 @@ class Foogle:
         document_id = 1
 
         for root, dirs, files in os.walk(self.root):
+            if os.path.relpath(root, self.root) in self.disallow_paths:
+                continue
+
             for file_name in files:
                 path = os.path.join(root, file_name)
+                if os.path.relpath(path, self.root) in self.disallow_paths:
+                    continue
 
                 if self.encoding == 'auto':
                     file_encoding = Utils.get_file_encoding(path)

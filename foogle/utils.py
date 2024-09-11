@@ -54,3 +54,13 @@ class Utils:
             return False
 
         return path.commonpath([file_path, folder_path]) == folder_path
+
+    @staticmethod
+    def read_disallow_index_file(filepath: str) -> set[str]:
+        if not path.isfile(filepath):
+            return set()
+        return set(
+            map(lambda x: x.strip('/').strip('\\').replace('/', '\\'), open(
+                filepath, encoding=Utils.get_file_encoding(filepath)).read().splitlines()
+                )
+        ) | {path.basename(filepath)}
