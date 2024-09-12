@@ -54,3 +54,30 @@ class Utils:
             return False
 
         return path.commonpath([file_path, folder_path]) == folder_path
+
+    @staticmethod
+    def read_disallow_index_file(filepath: str) -> (set[str], dict[str]):
+        if not path.isfile(filepath):
+            return set(), dict()
+        paths, file_extensions = {f".\\{path.basename(filepath)}"}, dict()
+        for line in map(
+                lambda x: ''.join(('.\\', x.strip('.').strip('/').strip('\\').replace('/', '\\'))),
+                open(filepath, encoding=Utils.get_file_encoding(filepath)).read().splitlines()
+        ):
+            if '*' in line:
+                dir_path, file_extension = path.splitext(line)
+                dir_path = dir_path.rstrip('\\*')
+                if file_extension not in file_extensions:
+                    file_extensions[file_extension] = {dir_path}
+                else:
+                    file_extensions[file_extension].add(dir_path)
+            else:
+                paths.add(line)
+        return paths, file_extensions
+
+    @staticmethod
+    def is_dir_is_sub_dir_in_set(dir_path: str, dir_paths_check: set[str]) -> bool:
+        for folder in dir_paths_check:
+            if dir_path.startswith(folder):
+                return True
+        return False
